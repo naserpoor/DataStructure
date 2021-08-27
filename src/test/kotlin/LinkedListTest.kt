@@ -32,7 +32,7 @@ internal class LinkedListTest {
     }
 
     @Test
-    fun `add(index) should throw exception when index is out of bound`(){
+    fun `add(index) should return false when index is out of bound`(){
         assertFalse( list.add(-1,0) )
         assertFalse( list.add(1,1) )
         list.add(0,1)
@@ -135,5 +135,66 @@ internal class LinkedListTest {
 
         assertThrows(IndexOutOfBoundsException::class.java) { list.get(-1) }
         assertThrows(IndexOutOfBoundsException::class.java) { list.get(5) }
+    }
+
+    @Test
+    fun `removeAt() should remove item at index`() {
+        repeat(5){
+            list.add(it)
+        }
+        var current = list.get(0)
+        list.removeAt(0)
+        assertNotEquals(list.get(0), current)
+
+        current = list.get(2)
+        assertEquals(current, list.removeAt(2))
+        assertNotEquals(list.get(2),current)
+
+        current = list.get(list.size - 1)
+        assertEquals(current, list.removeAt(list.size - 1))
+        assertNotEquals(list.get(list.size - 1),current)
+    }
+
+    @Test
+    fun `removeAt() should throw exception when index is out of bound`() {
+        assertThrows(IndexOutOfBoundsException::class.java){
+            list.removeAt(0)
+        }
+        repeat(5){
+            list.add(it)
+        }
+        assertThrows(IndexOutOfBoundsException::class.java){
+            list.removeAt(-1)
+        }
+        assertThrows(IndexOutOfBoundsException::class.java){
+            list.removeAt(5)
+        }
+    }
+
+    @Test
+    fun `removeAt() should decrease size`(){
+        repeat(5){
+            list.add(it)
+        }
+        list.removeAt(0)
+        assertEquals(4,list.size)
+    }
+
+    @Test
+    fun `remove(data) should remove data when finds it and return index`() {
+        repeat(5){
+            list.add(it)
+        }
+        assertEquals(1, list.remove(1))
+        assertNotEquals(1,list.get(1))
+    }
+
+    @Test
+    fun `remove(data) should return -1 when could not find item`() {
+        assertEquals(-1,list.remove(5))
+        repeat(5){
+            list.add(it)
+        }
+        assertEquals(-1, list.remove(5))
     }
 }

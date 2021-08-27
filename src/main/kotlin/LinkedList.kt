@@ -71,4 +71,54 @@ class LinkedList<T> {
         return getLastNode()?.data
     }
     operator fun get(index:Int) = getNode(index)?.data ?: throw IndexOutOfBoundsException()
+
+    fun removeAt(index: Int):T {
+        if (index < 0 || index >= size) {
+            throw IndexOutOfBoundsException()
+        }
+        val cur = getNode(index) ?: throw IndexOutOfBoundsException()
+        val prev = getNode(index - 1)
+        prev?.next = cur.next
+        if(index == 0){
+            top = cur.next
+        }
+        size--
+        return cur.data
+    }
+
+    fun remove(data: T):Int {
+        var prev:Node<T>? = null
+        var cur = top ?: return -1
+        var next = cur.next
+        var idx = 0
+        while (next != null && cur.data != data) {
+            prev = cur
+            cur = next
+            next = cur.next
+            idx++
+        }
+
+        if (cur.data == data) {
+            prev?.next = cur.next
+            if (idx == 0) {
+                top = cur.next
+            }
+            size--
+            return idx
+        } else {
+            return -1
+        }
+    }
+
+    fun removeLast():T {
+        return removeAt(size - 1)
+    }
+
+    fun removeFirst():T {
+        return removeAt(0)
+    }
+
+    fun remove():T {
+        return removeLast()
+    }
 }
